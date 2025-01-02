@@ -73,6 +73,7 @@ def handle_config():
         return jsonify(load_config())
     
     config = request.json
+    config["current_media"] = app.config['UPLOAD_FOLDER'] + "/" + config["current_media"]
     save_config(config)
     
     # Update systemd service file

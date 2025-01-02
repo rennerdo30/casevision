@@ -139,7 +139,7 @@
         }
 
         async function playMedia(filename) {
-            currentConfig.current_media = `/home/rennerdo30/Videos/${filename}`;
+            currentConfig.current_media = `${filename}`;
             await fetch('/api/config', {
                 method: 'PUT',
                 headers: {
