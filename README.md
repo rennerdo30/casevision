@@ -26,16 +26,9 @@ CaseVision transforms your computer case display into a dynamic video panel. Ori
 
 ## Quick Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/casevision.git
-cd casevision
+1. Run the installation script:
 ```
-
-2. Run the installation script:
-```bash
-chmod +x install.sh
-./install.sh
+curl https://raw.githubusercontent.com/rennerdo30/casevision/refs/heads/master/install.sh | bash 
 ```
 
 The script will automatically:

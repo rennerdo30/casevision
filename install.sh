@@ -69,6 +69,7 @@ cd casevision
 
 # Copy files maintaining directory structure
 print_status "Copying files..."
+ls -al
 sudo cp -r opt/casevision/* $INSTALL_DIR/
 sudo cp boot/config.txt /boot/config.txt
 sudo cp boot/cmdline.txt /boot/cmdline.txt
