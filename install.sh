@@ -71,8 +71,8 @@ cd casevision
 print_status "Copying files..."
 ls -al
 sudo cp -r opt/casevision/* $INSTALL_DIR/
-sudo cp boot/config.txt /boot/config.txt
-sudo cp boot/cmdline.txt /boot/cmdline.txt
+sudo cp boot/firmware/config.txt /boot/firmware/config.txt
+sudo cp boot/firmware/cmdline.txt /boot/firmware/cmdline.txt
 
 # Set correct permissions
 print_status "Setting permissions..."
