@@ -70,6 +70,7 @@ cd casevision
 # Copy files maintaining directory structure
 print_status "Copying files..."
 sudo cp -r ./* $INSTALL_DIR/
+sudo cp -r ./.git $INSTALL_DIR/
 #sudo sed -i 's/disable_fw_kms_setup=1/disable_fw_kms_setup=0/' /boot/firmware/config.txt
 #sudo sed -i '1s/$/ video=HDMI-A-1:800x1280M@60,rotate=90/' /boot/firmware/cmdline.txt
 
