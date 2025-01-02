@@ -154,7 +154,7 @@ echo -e "  sudo journalctl -u casevision-control"
 echo -e "  sudo journalctl -u casevision-playback"
 
 print_warning "A reboot is recommended to apply all changes. Would you like to reboot now? (y/n)"
-read -r reboot_response
+read reboot_response
 if [[ "$reboot_response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     sudo reboot
 fi
