@@ -5,16 +5,18 @@ import os
 import subprocess
 import json
 from werkzeug.utils import secure_filename
+import getpass
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '/home/rennerdo30/Videos'
+app.config['UPLOAD_FOLDER'] = '/opt/casevision/videos'
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024  # 1GB max file size
+CURRENT_USER = getpass.getuser()
 
 # Ensure upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Config file path
-CONFIG_FILE = 'vlc_config.json'
+CONFIG_FILE = os.path.join('/opt/casevision', 'vlc_config.json')
 
 def load_config():
     try:
@@ -23,7 +25,7 @@ def load_config():
     except FileNotFoundError:
         return {
             'current_media': '',
-            'command_line': '/usr/bin/cvlc --no-video-title-show --loop --width=800 --height=1422 --no-osd --no-audio --drm-vout-window 800x1422+0+0'
+            'command_line': f'/usr/bin/cvlc --no-video-title-show --loop --width=800 --height=1422 --no-osd --no-audio --drm-vout-window 800x1422+0+0'
         }
 
 def save_config(config):
@@ -80,7 +82,7 @@ After=multi-user.target
 
 [Service]
 Type=simple
-User=pi
+User={CURRENT_USER}
 Environment=DISPLAY=:0
 ExecStart={config['command_line']} {config['current_media']}
 Restart=always
