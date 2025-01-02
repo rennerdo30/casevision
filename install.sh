@@ -58,7 +58,7 @@ sudo apt-get install -y vlc-plugin-base python3-flask python3-pip git
 print_status "Creating installation directory..."
 sudo mkdir -p $INSTALL_DIR
 sudo mkdir -p $INSTALL_DIR/templates
-mkdir -p $MEDIA_DIR
+sudo mkdir -p $MEDIA_DIR
 
 # Clone repository
 print_status "Cloning CaseVision repository..."
@@ -69,7 +69,6 @@ cd casevision
 
 # Copy files maintaining directory structure
 print_status "Copying files..."
-ls -al
 sudo cp -r opt/casevision/* $INSTALL_DIR/
 sudo cp boot/firmware/config.txt /boot/firmware/config.txt
 sudo cat boot/firmware/cmdline.txt >> /boot/firmware/cmdline.txt
