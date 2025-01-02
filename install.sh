@@ -72,7 +72,7 @@ print_status "Copying files..."
 ls -al
 sudo cp -r opt/casevision/* $INSTALL_DIR/
 sudo cp boot/firmware/config.txt /boot/firmware/config.txt
-sudo cp boot/firmware/cmdline.txt /boot/firmware/cmdline.txt
+sudo cat boot/firmware/cmdline.txt >> /boot/firmware/cmdline.txt
 
 # Set correct permissions
 print_status "Setting permissions..."
@@ -156,7 +156,7 @@ echo -e "  sudo journalctl -u casevision-playback"
 print_warning "A reboot is recommended to apply all changes. Would you like to reboot now? (y/n)"
 read reboot_response
 if [[ "$reboot_response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-    sudo reboot
+    echo sudo reboot
 fi
 
 exit 0
