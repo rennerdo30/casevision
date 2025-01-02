@@ -1,0 +1,171 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CaseVision</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .media-list {
+            list-style: none;
+            padding: 0;
+        }
+        .media-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .command-line {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .url-input {
+            width: 70%;
+            padding: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CaseVision Control Panel</h1>
+    <p style="color: #666; margin-bottom: 20px;">Transform your computer case into a dynamic display</p>
+    
+    <div class="section">
+        <h2>Command Line Configuration</h2>
+        <textarea id="commandLine" class="command-line" rows="3"></textarea>
+        <button onclick="updateConfig()">Update Command Line</button>
+    </div>
+
+    <div class="section">
+        <h2>Media Control</h2>
+        <div>
+            <input type="text" id="urlInput" class="url-input" placeholder="Enter URL">
+            <button onclick="playUrl()">Play URL</button>
+        </div>
+        
+        <div>
+            <h3>Upload Media</h3>
+            <input type="file" id="fileInput">
+            <button onclick="uploadFile()">Upload</button>
+        </div>
+        
+        <h3>Available Media</h3>
+        <ul id="mediaList" class="media-list"></ul>
+    </div>
+
+    <script>
+        let currentConfig = {};
+
+        async function loadConfig() {
+            const response = await fetch('/api/config');
+            currentConfig = await response.json();
+            document.getElementById('commandLine').value = currentConfig.command_line;
+        }
+
+        async function updateConfig() {
+            currentConfig.command_line = document.getElementById('commandLine').value;
+            await fetch('/api/config', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(currentConfig)
+            });
+            alert('Configuration updated');
+        }
+
+        async function loadMediaList() {
+            const response = await fetch('/api/media/list');
+            const files = await response.json();
+            const mediaList = document.getElementById('mediaList');
+            mediaList.innerHTML = '';
+            
+            files.forEach(file => {
+                const li = document.createElement('li');
+                li.className = 'media-item';
+                li.innerHTML = `
+                    <span>${file}</span>
+                    <div>
+                        <button onclick="playMedia('${file}')">Play</button>
+                        <button onclick="deleteMedia('${file}')">Delete</button>
+                    </div>
+                `;
+                mediaList.appendChild(li);
+            });
+        }
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            await fetch('/api/media/upload', {
+                method: 'POST',
+                body: formData
+            });
+            
+            loadMediaList();
+        }
+
+        async function deleteMedia(filename) {
+            if (!confirm(`Delete ${filename}?`)) return;
+            
+            await fetch(`/api/media/delete/${filename}`, {
+                method: 'DELETE'
+            });
+            
+            loadMediaList();
+        }
+
+        async function playMedia(filename) {
+            currentConfig.current_media = `/home/rennerdo30/Videos/${filename}`;
+            await fetch('/api/config', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(currentConfig)
+            });
+        }
+
+        async function playUrl() {
+            const url = document.getElementById('urlInput').value;
+            if (!url) return;
+            
+            currentConfig.current_media = url;
+            await fetch('/api/config', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(currentConfig)
+            });
+        }
+
+        // Initial load
+        loadConfig();
+        loadMediaList();
+    </script>
+</body>
+</html>
